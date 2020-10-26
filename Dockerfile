@@ -20,7 +20,6 @@ ADD requirements.txt /tmp/requirements.txt
 
 RUN pip install \
     -r /tmp/requirements.txt \
-    --user \
     --disable-pip-version-check \
     --no-cache-dir \
     --no-warn-script-location \
