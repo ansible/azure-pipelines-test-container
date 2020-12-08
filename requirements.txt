@@ -1,2 +1,8 @@
-coverage==4.5.4
-cryptography==3.1.1
+# ansible-core requirements (for use by collections installing ansible-core to have access to ansible-test)
+Jinja2
+PyYAML
+cryptography  # also required by ansible-test authentication to ansible-core-ci
+packaging
+
+# ansible-test requirements (for coverage reporting)
+coverage<5
