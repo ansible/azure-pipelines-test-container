@@ -1,5 +1,8 @@
 FROM quay.io/bedrock/ubuntu:20.04
 
+# make sure non-root pip installed binaries are on the user's path
+ENV PATH="${PATH}:~/.local/bin"
+
 RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apt-transport-https \
@@ -31,8 +34,6 @@ RUN ln -s pip3 /usr/bin/pip
 
 ADD requirements.txt /tmp/requirements.txt
 ADD constraints.txt /tmp/constraints.txt
-
-RUN sed 's|"$|:~/.local/bin"|' -i /etc/environment  # make sure non-root pip installed binaries are on the user's path
 
 RUN pip install \
     -r /tmp/requirements.txt \
