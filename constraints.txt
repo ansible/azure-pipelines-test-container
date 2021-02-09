@@ -8,3 +8,4 @@ packaging==20.7
 pycparser==2.20
 pyparsing==2.4.7
 six==1.15.0
+resolvelib==0.5.4

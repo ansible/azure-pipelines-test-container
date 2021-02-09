@@ -3,6 +3,7 @@ Jinja2
 PyYAML
 cryptography  # also required by ansible-test authentication to ansible-core-ci
 packaging
+resolvelib >= 0.5.3, < 0.6.0
 
 # ansible-test requirements (for coverage reporting)
 coverage<5
