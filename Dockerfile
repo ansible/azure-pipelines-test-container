@@ -1,4 +1,4 @@
-FROM quay.io/bedrock/ubuntu:20.04
+FROM quay.io/bedrock/ubuntu:jammy-20220428
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
@@ -19,19 +19,6 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb > packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    rm packages-microsoft-prod.deb
-
-RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    dotnet-runtime-3.1 \
-    && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN ln -s pip3 /usr/bin/pip
-
 ADD requirements.txt /tmp/requirements.txt
 ADD constraints.txt /tmp/constraints.txt
 
@@ -42,4 +29,4 @@ RUN pip install \
     --no-cache-dir \
     --no-warn-script-location \
     && \
-    rm /tmp/requirements.txt
+    rm /tmp/requirements.txt /tmp/constraints.txt

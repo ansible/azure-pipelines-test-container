@@ -1,9 +1,6 @@
 # ansible-core requirements (for use by collections installing ansible-core to have access to ansible-test)
 Jinja2
 PyYAML
-cryptography < 3.4  # also required by ansible-test authentication to ansible-core-ci. Pinned because of the rust switch.
+cryptography
 packaging
 resolvelib >= 0.5.3, < 0.6.0
-
-# ansible-test requirements (for coverage reporting)
-coverage<5
