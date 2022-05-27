@@ -30,8 +30,6 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN ln -s pip3 /usr/bin/pip
-
 ADD requirements.txt /tmp/requirements.txt
 ADD constraints.txt /tmp/constraints.txt
 
