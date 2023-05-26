@@ -1,4 +1,4 @@
-FROM quay.io/bedrock/ubuntu:focal-20220531
+FROM quay.io/bedrock/ubuntu:jammy-20230425
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
@@ -10,7 +10,7 @@ RUN apt-get update -y && \
     git \
     openssh-client \
     python3-pip \
-    python3.9-venv \
+    python3.10-venv \
     sudo \
     && \
     apt-get clean && \
@@ -18,9 +18,6 @@ RUN apt-get update -y && \
 
 ADD requirements.txt /tmp/requirements.txt
 ADD constraints.txt /tmp/constraints.txt
-
-RUN ln -sf python3.9 /usr/bin/python3
-RUN ln -sf python3 /usr/bin/python
 
 RUN pip install \
     -r /tmp/requirements.txt \
