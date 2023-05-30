@@ -9,6 +9,7 @@ RUN apt-get update -y && \
     docker.io \
     git \
     openssh-client \
+    python-is-python3 \
     python3-pip \
     python3.10-venv \
     sudo \
