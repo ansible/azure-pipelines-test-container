@@ -1,9 +1,8 @@
-cffi==1.17.0rc1
-cryptography==42.0.7
-Jinja2==3.1.4
-MarkupSafe==2.1.5
-packaging==23.2
-pycparser==2.22
-pyparsing==3.1.1
-PyYAML==6.0.1
+cffi==1.15.1
+cryptography==40.0.2
+Jinja2==3.1.2
+MarkupSafe==2.1.2
+packaging==23.1
+pycparser==2.21
+PyYAML==6.0
 resolvelib==0.5.4
