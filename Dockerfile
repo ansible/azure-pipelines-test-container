@@ -1,30 +1,30 @@
-FROM quay.io/bedrock/ubuntu:jammy-20230425
+FROM quay.io/bedrock/alpine:3.19.1
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
 
-RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apk add \
     curl \
-    docker.io \
+    docker-cli \
     git \
     openssh-client \
-    python-is-python3 \
-    python3-pip \
-    python3.10-venv \
+    py3-pip \
+    python3 \
     sudo \
-    && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    --no-cache
 
 ADD requirements.txt /tmp/requirements.txt
 ADD constraints.txt /tmp/constraints.txt
 
+# allow pip installs without requiring additional options
+RUN rm /usr/lib/python*/EXTERNALLY-MANAGED
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PIP_ROOT_USER_ACTION=ignore
+
 RUN pip install \
     -r /tmp/requirements.txt \
     -c /tmp/constraints.txt \
-    --disable-pip-version-check \
     --no-cache-dir \
-    --no-warn-script-location \
     && \
     rm /tmp/requirements.txt /tmp/constraints.txt
