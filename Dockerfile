@@ -1,23 +1,41 @@
-FROM quay.io/bedrock/alpine:3.19.1
+FROM quay.io/bedrock/ubuntu:noble-20240429
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
 
-RUN apk add \
+# Enable the deadsnakes PPA to provide additional packages.
+COPY files/deadsnakes.gpg /etc/apt/keyrings/deadsnakes.gpg
+COPY files/deadsnakes.list /etc/apt/sources.list.d/deadsnakes.list
+
+RUN apt-get update -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ca-certificates \
     curl \
-    docker-cli \
+    docker.io \
     git \
     openssh-client \
-    py3-pip \
-    python3 \
+    python3.11-venv \
     sudo \
-    --no-cache
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# The python3-pip package depends on python3:all, which will install an additional Python interpreter.
+# Downloading and installing the package this way avoids that issue, at the cost of breaking further package installs due to unmet dependencies.
+RUN cd /tmp && \
+    apt-get update -y && \
+    apt-get download -y python3-pip && \
+    dpkg --force-all -i /tmp/*.deb && \
+    rm /usr/bin/pip3.12 && \
+    rm /tmp/*.deb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN ln -s python3.11 /usr/bin/python3
+RUN ln -s python3.11 /usr/bin/python
 
 ADD requirements.txt /tmp/requirements.txt
 ADD constraints.txt /tmp/constraints.txt
-
-# allow pip installs without requiring additional options
-RUN rm /usr/lib/python*/EXTERNALLY-MANAGED
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PIP_ROOT_USER_ACTION=ignore
