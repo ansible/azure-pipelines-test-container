@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/ubuntu:noble-20250714
+FROM public.ecr.aws/docker/library/ubuntu:noble-20250805
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
