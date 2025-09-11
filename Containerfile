@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/ubuntu:noble-20250714
+FROM public.ecr.aws/docker/library/ubuntu:noble-20250805
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
@@ -18,8 +18,8 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ADD requirements.txt /tmp/requirements.txt
-ADD constraints.txt /tmp/constraints.txt
+ADD files/requirements.txt /tmp/requirements.txt
+ADD files/constraints.txt /tmp/constraints.txt
 
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
