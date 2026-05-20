@@ -1,7 +1,11 @@
-FROM public.ecr.aws/docker/library/ubuntu:noble-20250805
+FROM public.ecr.aws/docker/library/ubuntu:resolute-20260413
 
 # make sure non-root pip installed binaries are on the user's path
 ENV PATH="${PATH}:~/.local/bin"
+
+# Enable the deadsnakes PPA to provide additional packages.
+COPY files/deadsnakes.gpg /etc/apt/keyrings/deadsnakes.gpg
+COPY files/deadsnakes.list /etc/apt/sources.list.d/deadsnakes.list
 
 RUN apt-get update -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -10,13 +14,24 @@ RUN apt-get update -y && \
     docker.io \
     git \
     openssh-client \
-    python-is-python3 \
-    python3-pip \
-    python3-venv \
+    python3.13-venv \
     sudo \
     && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# The python3-pip package depends on python3:all, which will install an additional Python interpreter.
+# Downloading and installing the package this way avoids that issue, at the cost of breaking further package installs due to unmet dependencies.
+RUN cd /tmp && \
+    apt-get update -y && \
+    apt-get download -y python3-pip python3-wheel python3-packaging && \
+    dpkg --force-all -i /tmp/*.deb && \
+    rm /tmp/*.deb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf python3.13 /usr/bin/python3
+RUN ln -sf python3.13 /usr/bin/python
 
 ADD files/requirements.txt /tmp/requirements.txt
 ADD files/constraints.txt /tmp/constraints.txt
